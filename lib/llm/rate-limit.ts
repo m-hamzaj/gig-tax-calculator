@@ -25,21 +25,37 @@ const WINDOW = "60 s";
 let ratelimit: Ratelimit | null = null;
 
 /**
- * Returns null if Upstash isn't configured (e.g. local dev without the
- * env vars set) -- callers must treat a null return as "rate limiting is
- * unavailable" and decide how to handle that explicitly, never silently
- * skip the check without noticing.
+ * Returns null if Upstash isn't configured OR isn't configured correctly
+ * (e.g. local dev without the env vars set, or a malformed value) --
+ * callers must treat a null return as "rate limiting is unavailable" and
+ * decide how to handle that explicitly, never silently skip the check
+ * without noticing.
+ *
+ * Construction wrapped in try/catch deliberately: found live in
+ * production that a malformed UPSTASH_REDIS_REST_URL (quote characters
+ * pasted into Vercel's env var field along with the value -- Vercel's raw
+ * field doesn't strip them the way a real .env file's parser does) made
+ * Redis.fromEnv() throw synchronously, which was NOT caught anywhere and
+ * crashed the entire /api/calculate-explain route with a 500 -- the exact
+ * same class of gap this project already fixed once for the missing-
+ * GROQ_API_KEY case in groq-client.ts, just not yet applied here. A
+ * misconfigured rate limiter should degrade to "no rate limiting," not
+ * take down the whole request.
  */
 export function getRateLimiter(): Ratelimit | null {
   if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
     return null;
   }
   if (!ratelimit) {
-    ratelimit = new Ratelimit({
-      redis: Redis.fromEnv(),
-      limiter: Ratelimit.slidingWindow(REQUESTS_PER_WINDOW, WINDOW),
-      prefix: "gig-tax-calc:explain",
-    });
+    try {
+      ratelimit = new Ratelimit({
+        redis: Redis.fromEnv(),
+        limiter: Ratelimit.slidingWindow(REQUESTS_PER_WINDOW, WINDOW),
+        prefix: "gig-tax-calc:explain",
+      });
+    } catch {
+      return null;
+    }
   }
   return ratelimit;
 }

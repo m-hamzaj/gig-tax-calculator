@@ -27,13 +27,21 @@ export interface ExplainResponse {
 export async function POST(request: NextRequest) {
   const limiter = getRateLimiter();
   if (limiter) {
-    const ip = getClientIp(request.headers);
-    const { success } = await limiter.limit(ip);
-    if (!success) {
-      return NextResponse.json(
-        { error: "You're asking too fast — try again in a minute." },
-        { status: 429 }
-      );
+    try {
+      const ip = getClientIp(request.headers);
+      const { success } = await limiter.limit(ip);
+      if (!success) {
+        return NextResponse.json(
+          { error: "You're asking too fast — try again in a minute." },
+          { status: 429 }
+        );
+      }
+    } catch {
+      // A request-time failure reaching Upstash (network issue, transient
+      // outage) -- same "degrade, don't crash" contract as
+      // getRateLimiter()'s own construction-time try/catch. Rate limiting
+      // being briefly unavailable should never take down the calculator
+      // itself; proceed unlimited for this one request rather than 500.
     }
   }
 
