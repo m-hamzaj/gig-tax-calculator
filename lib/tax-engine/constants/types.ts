@@ -9,6 +9,20 @@ export interface TaxBracket {
   to: number | null;
 }
 
+/** One IRS standard-mileage-rate period. Most years have exactly one
+ * period covering the whole year, but the IRS can (rarely) issue a
+ * mid-year rate change -- 2026 is one such year -- so this is always an
+ * array, never a single flat number, to avoid silently applying the
+ * wrong half-year's rate. */
+export interface MileageRatePeriod {
+  /** ISO date, inclusive. */
+  from: string;
+  /** ISO date, inclusive. */
+  to: string;
+  /** Dollars per business mile for this period. */
+  rate: number;
+}
+
 export interface TaxYearConstants {
   taxYear: number;
   /** Self-employment tax rate mechanics -- stable by law across years,
@@ -40,4 +54,8 @@ export interface TaxYearConstants {
    * Periods are NOT equal three-month quarters -- Q2 covers 2 months,
    * Q4 covers 4 -- see quarterly-estimate.ts. */
   quarterlyDueDates: [string, string, string, string];
+  /** IRS optional standard mileage rate(s) for business use this year.
+   * See MileageRatePeriod -- almost always one period, occasionally more
+   * if the IRS issues a mid-year change. */
+  standardMileageRatePeriods: MileageRatePeriod[];
 }

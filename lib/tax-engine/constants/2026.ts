@@ -15,6 +15,14 @@ import type { TaxYearConstants } from "./types";
  *   - SE tax mechanics (92.35%, 15.3%, Additional Medicare Tax
  *     thresholds): stable by law (IRC Sec. 1401/1402), not an annual
  *     inflation adjustment -- unchanged from prior years' verification.
+ *   - Standard mileage rate: the IRS set the 2026 business rate at 72.5
+ *     cents/mile effective Jan 1, 2026, then made a rare mid-year change
+ *     (Notice 2026-10, announced July 13, 2026, citing high fuel prices)
+ *     raising it to 76 cents/mile for July 1 - Dec 31, 2026
+ *     (irs.gov/newsroom "IRS sets 2026 business standard mileage rate..."
+ *     + the July mid-year update; verified 2026-10-07 via web search).
+ *     Two periods, NOT one flat rate for the year -- see
+ *     standardMileageRatePeriods below.
  *
  * IMPORTANT: these figures must be RE-VERIFIED directly against irs.gov
  * and ssa.gov each year before adding/updating a constants file -- no
@@ -80,4 +88,10 @@ export const TAX_YEAR_2026: TaxYearConstants = {
   // IRS Form 1040-ES: periods are Jan-Mar, Apr-May, Jun-Aug, Sep-Dec --
   // NOT equal three-month quarters. Q4 for TY2026 is due Jan 15, 2027.
   quarterlyDueDates: ["2026-04-15", "2026-06-15", "2026-09-15", "2027-01-15"],
+
+  // Rare mid-year rate change -- two periods, not one flat rate.
+  standardMileageRatePeriods: [
+    { from: "2026-01-01", to: "2026-06-30", rate: 0.725 },
+    { from: "2026-07-01", to: "2026-12-31", rate: 0.76 },
+  ],
 };

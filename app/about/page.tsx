@@ -44,9 +44,11 @@ export default function AboutPage() {
       <div className="mt-2 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
         <p>
           Questions, feedback, or found something that looks wrong? Reach out at{" "}
-          {/* TODO before launch: replace with the real contact email you two want public on this site. */}
-          <a href="mailto:hello@example.com" className="underline underline-offset-2 hover:no-underline">
-            hello@example.com
+          <a
+            href="mailto:mhamzajavaid370@gmail.com"
+            className="underline underline-offset-2 hover:no-underline"
+          >
+            mhamzajavaid370@gmail.com
           </a>
           .
         </p>

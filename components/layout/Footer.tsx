@@ -9,6 +9,9 @@ export default function Footer() {
           and is never stored on our servers.
         </p>
         <nav className="flex flex-wrap gap-4">
+          <Link href="/tools" className="hover:text-zinc-900 dark:hover:text-zinc-100">
+            All tools
+          </Link>
           <Link href="/privacy" className="hover:text-zinc-900 dark:hover:text-zinc-100">
             Privacy
           </Link>

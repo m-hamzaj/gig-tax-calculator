@@ -17,6 +17,10 @@ import type { TaxYearConstants } from "./types";
  *   - Social Security wage base ($176,100): SSA.gov contribution and
  *     benefit base announcement for 2025.
  *   - SE tax mechanics: stable by law, unchanged from 2026's file.
+ *   - Standard mileage rate (70 cents/mile, business use): IRS Notice
+ *     2025-05, announced Dec 2024, effective for all of calendar year
+ *     2025 (verified 2026-10-07 via web search against reporting citing
+ *     the IRS release).
  *
  * See ../__tests__/calculate.test.ts for the golden-value tests these
  * figures are checked against.
@@ -77,4 +81,7 @@ export const TAX_YEAR_2025: TaxYearConstants = {
 
   // June 15, 2025 fell on a Sunday, so Q2 shifts to Monday June 16.
   quarterlyDueDates: ["2025-04-15", "2025-06-16", "2025-09-15", "2026-01-15"],
+
+  // One flat rate for the full year (no mid-year change in 2025).
+  standardMileageRatePeriods: [{ from: "2025-01-01", to: "2025-12-31", rate: 0.7 }],
 };

@@ -6,9 +6,8 @@ friend, if you're splitting this).
 
 ## 1. Before deploying
 
-- [ ] **Replace the placeholder contact email.** `app/about/page.tsx` has
-      `hello@example.com` with a `TODO` comment next to it — swap in the
-      real email you two want public on the site.
+- [x] **Replace the placeholder contact email.** Done — `app/about/page.tsx`
+      now uses `mhamzajavaid370@gmail.com`.
 - [ ] **Create a free Upstash account** at [upstash.com](https://upstash.com) ->
       Create Database (Redis, free tier is enough) -> REST API tab -> copy
       the URL and token.
